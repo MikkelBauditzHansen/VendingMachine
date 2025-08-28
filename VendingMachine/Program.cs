@@ -123,23 +123,6 @@ namespace VendingMachine
         }
     }
 
-    class Product
-    {
-        public int ID { get; set; }
-        public string Name { get; set; }
-        public int Price { get; set; }
-        public string Size { get; set; }
-        public int Quantity { get; set; }
-
-        public Product(int id, string name, int price, string size, int quantity)
-        {
-            ID = id;
-            Name = name;
-            Price = price;
-            Size = size;
-            Quantity = quantity;
-        }
-    }
-}
+  }
         
     
