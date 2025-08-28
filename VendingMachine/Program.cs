@@ -14,93 +14,125 @@ namespace VendingMachine
             IVendingMachineRepo repo = new VendingMachineCollectionRepo();
             List<Product> products = repo.GetAll();
 
-
+            Console.WriteLine("Skriv rolle: (Admin, Kunde)");
+            string menuInput = Console.ReadLine();
+            bool running = false;
+            bool adminRunning = false;
             int saldo = 0;
-            bool running = true;
+            if (menuInput.ToLower() == "kunde")
+            {
+                running = true;
+            }
 
-            while (running)
+            else if (menuInput.ToLower() == "Admin")
+            {
+                adminRunning = true;
+            }
+            else
+            {
+                Console.WriteLine("ugyldig svar");
+            }
+            while (adminRunning)
             {
                 Console.Clear();
                 Console.WriteLine("=== SIMPEL VENDING MACHINE ===");
-                Console.WriteLine("Saldo: " + saldo + " kr.");
+                Console.WriteLine("Bank saldo: " + saldo + " kr.");
                 Console.WriteLine();
                 PrintProducts(products);
                 Console.WriteLine();
                 Console.WriteLine("1) Indsæt penge");
-                Console.WriteLine("2) Køb vare (skriv ID)");
-                Console.WriteLine("3) Få returpenge");
+                Console.WriteLine("2) Hæv penge");
+                Console.WriteLine("3) Tilføj produkt");
+                Console.WriteLine("4) Fjern produkt");
                 Console.WriteLine("0) Afslut");
                 Console.Write("Vælg: ");
+                
+            }
 
-                string input = Console.ReadLine();
-                Console.WriteLine();
 
-                if (input == "1")
+                while (running)
                 {
-                    Console.Write("Indtast beløb: ");
-                    string belobTxt = Console.ReadLine();
-                    int belob;
-                    if (int.TryParse(belobTxt, out belob) && belob > 0)
+                    Console.Clear();
+                    Console.WriteLine("=== SIMPEL VENDING MACHINE ===");
+                    Console.WriteLine("Saldo: " + saldo + " kr.");
+                    Console.WriteLine();
+                    PrintProducts(products);
+                    Console.WriteLine();
+                    Console.WriteLine("1) Indsæt penge");
+                    Console.WriteLine("2) Køb vare (skriv ID)");
+                    Console.WriteLine("3) Få returpenge");
+                    Console.WriteLine("0) Afslut");
+                    Console.Write("Vælg: ");
+
+                    string input = Console.ReadLine();
+                    Console.WriteLine();
+
+                    if (input == "1")
                     {
-                        saldo += belob;
-                        Console.WriteLine("Du indsatte " + belob + " kr.");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Ugyldigt beløb.");
-                    }
-                }
-                else if (input == "2")
-                {
-                    Console.Write("Indtast produkt-ID: ");
-                    string idTxt = Console.ReadLine();
-                    int id;
-                    if (int.TryParse(idTxt, out id))
-                    {
-                        Product chosen = FindById(products, id);
-                        if (chosen == null)
+                        Console.Write("Indtast beløb: ");
+                        string belobTxt = Console.ReadLine();
+                        int belob;
+                        if (int.TryParse(belobTxt, out belob) && belob > 0)
                         {
-                            Console.WriteLine("Ukendt produkt.");
-                        }
-                        else if (chosen.Quantity <= 0)
-                        {
-                            Console.WriteLine("Udsolgt!");
-                        }
-                        else if (saldo < chosen.Price)
-                        {
-                            Console.WriteLine("For lav saldo.");
+                            saldo += belob;
+                            Console.WriteLine("Du indsatte " + belob + " kr.");
                         }
                         else
                         {
-                            saldo -= chosen.Price;
-                            chosen.Quantity -= 1;
-                            Console.WriteLine("Du købte: " + chosen.Name);
+                            Console.WriteLine("Ugyldigt beløb.");
                         }
                     }
-                }
-                else if (input == "3")
-                {
-                    Console.WriteLine("Du fik " + saldo + " kr. retur.");
-                    saldo = 0;
-                }
-                else if (input == "0")
-                {
-                    Console.WriteLine("Tak for besøget!");
-                    if (saldo > 0) Console.WriteLine("Returpenge: " + saldo + " kr.");
-                    running = false;
-                }
-                else
-                {
-                    Console.WriteLine("Ugyldigt valg.");
-                }
+                    else if (input == "2")
+                    {
+                        Console.Write("Indtast produkt-ID: ");
+                        string idTxt = Console.ReadLine();
+                        int id;
+                        if (int.TryParse(idTxt, out id))
+                        {
+                            Product chosen = FindById(products, id);
+                            if (chosen == null)
+                            {
+                                Console.WriteLine("Ukendt produkt.");
+                            }
+                            else if (chosen.Quantity <= 0)
+                            {
+                                Console.WriteLine("Udsolgt!");
+                            }
+                            else if (saldo < chosen.Price)
+                            {
+                                Console.WriteLine("For lav saldo.");
+                            }
+                            else
+                            {
+                                saldo -= chosen.Price;
+                                chosen.Quantity -= 1;
+                                Console.WriteLine("Du købte: " + chosen.Name);
+                            }
+                        }
+                    }
+                    else if (input == "3")
+                    {
+                        Console.WriteLine("Du fik " + saldo + " kr. retur.");
+                        saldo = 0;
+                    }
+                    else if (input == "0")
+                    {
+                        Console.WriteLine("Tak for besøget!");
+                        if (saldo > 0) Console.WriteLine("Returpenge: " + saldo + " kr.");
+                        running = false;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Ugyldigt valg.");
+                    }
 
-                if (running)
-                {
-                    Console.WriteLine();
-                    Console.WriteLine("Tryk en tast for at fortsætte...");
-                    Console.ReadKey();
+                    if (running)
+                    {
+                        Console.WriteLine();
+                        Console.WriteLine("Tryk en tast for at fortsætte...");
+                        Console.ReadKey();
+                    }
                 }
-            }
         }
 
         static void PrintProducts(List<Product> products)
