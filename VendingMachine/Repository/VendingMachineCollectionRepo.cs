@@ -11,7 +11,21 @@ namespace VendingMachine.Repository
         private readonly List<Product> _products;
 
         public VendingMachineCollectionRepo()
-        { }
+        {
+            _products = new List<Product>();
+
+            Product cola = new Product(1, "Cola", 20, "0.33L", 4);
+            _products.Add(cola);
+
+            Product sprite = new Product(2,"Sprite", 18, "0.33L", 5);
+            _products.Add(sprite);
+
+            Product mars = new Product(3,"MarsBar", 15, "51g", 6);
+            _products.Add(mars);
+
+            Product twix = new Product(4,"TwixBar", 15, "50g", 3);
+            _products.Add(twix);
+        }
 
         public void Add(Product product)
         {
