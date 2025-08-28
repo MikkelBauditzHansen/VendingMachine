@@ -207,7 +207,7 @@ namespace VendingMachine
             string quantityText = Console.ReadLine();
             int quantity = Convert.ToInt32(idText);
 
-            Product newProduct = Product(id, nameText, price, sizeText, quantity);
+            Product newProduct = new Product(id, nameText, price, sizeText, quantity);
 
             repo.Add(newProduct);
 
