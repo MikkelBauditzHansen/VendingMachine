@@ -24,7 +24,7 @@ namespace VendingMachine
                 running = true;
             }
 
-            else if (menuInput.ToLower() == "Admin")
+            if (menuInput.ToLower() == "admin")
             {
                 adminRunning = true;
             }
@@ -46,7 +46,40 @@ namespace VendingMachine
                 Console.WriteLine("4) Fjern produkt");
                 Console.WriteLine("0) Afslut");
                 Console.Write("Vælg: ");
-                
+
+                string adminInput = Console.ReadLine();
+
+                if (adminInput == "1")
+                {
+                    Console.Write("Indtast beløb: ");
+                    string belobTxt = Console.ReadLine();
+                    int belob;
+                    if (int.TryParse(belobTxt, out belob) && belob > 0)
+                    {
+                        saldo += belob;
+                        Console.WriteLine("Du indsatte " + belob + " kr.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Ugyldigt beløb.");
+                    }
+                }
+                else if (adminInput == "2")
+                {
+                    Console.Write("Indtast beløb: ");
+                    string belobTxt = Console.ReadLine();
+                    int belob;
+                    if (int.TryParse(belobTxt, out belob) && belob > 0)
+                    {
+                        saldo -= belob;
+                        Console.WriteLine("Du hævede " + belob + " kr.");
+                    }
+                    
+                }
+                else if (adminInput == "3")
+                {
+                    Console.Write("");
+                }
             }
 
 
@@ -135,7 +168,7 @@ namespace VendingMachine
                 }
         }
 
-        static void PrintProducts(List<Product> products)
+        static void PrintProducts(List<Product> products) //husk at fjern
         {
             Console.WriteLine("ID  Navn        Pris   Str.   Lager");
             Console.WriteLine("-------------------------------------");
@@ -145,13 +178,40 @@ namespace VendingMachine
             }
         }
 
-        static Product FindById(List<Product> products, int id)
+        static Product FindById(List<Product> products, int id) //husk at fjern
         {
             foreach (Product p in products)
             {
                 if (p.ID == id) return p;
             }
             return null;
+        }
+        private static void AddProduct(IVendingMachineRepo repo)
+        {
+            Console.WriteLine("===Admin: Tilføj nyt produkt====");
+            Console.WriteLine("ID: ");
+            string idText = Console.ReadLine();
+            int id = Convert.ToInt32(idText);
+
+            Console.WriteLine("Navn: ");
+            string nameText = Console.ReadLine();
+
+            Console.WriteLine("Pris: ");
+            string priceText = Console.ReadLine();
+            int price = Convert.ToInt32(idText);
+
+            Console.WriteLine("Størrelse: ");
+            string sizeText = Console.ReadLine();
+
+            Console.WriteLine("Antal: ");
+            string quantityText = Console.ReadLine();
+            int quantity = Convert.ToInt32(idText);
+
+            Product newProduct = Product(id, nameText, price, sizeText, quantity);
+
+            repo.Add(newProduct);
+
+            Console.WriteLine($"Produkt tilføjet: ID: {id}, {nameText}, {price}, {sizeText}, {quantity}");
         }
     }
 
