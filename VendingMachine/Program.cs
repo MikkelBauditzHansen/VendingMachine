@@ -76,13 +76,12 @@ namespace VendingMachine
                         saldo -= belob;
                         Console.WriteLine("Du hævede " + belob + " kr.");
                     }
-                    
+
                 }
                 else if (adminInput == "3")
                 {
-                    Console.Write("");
+                    AddProduct(repo);   // <-- sender repo ind
                 }
-            }
 
 
                 while (running)
@@ -158,7 +157,7 @@ namespace VendingMachine
                         Console.ReadKey();
                     }
                 }
-        }
+            }
 
         static void PrintProducts(List<Product> products) //husk at fjern
         {
@@ -170,13 +169,14 @@ namespace VendingMachine
             }
         }
 
-        static Product FindById(List<Product> products, int id) //husk at fjern
-        {
-            foreach (Product p in products)
+            static Product FindById(List<Product> products, int id) //husk at fjern
             {
-                if (p.ID == id) return p;
+                foreach (Product p in products)
+                {
+                    if (p.ID == id) return p;
+                }
+                return null;
             }
-            return null;
         }
         private static void AddProduct(IVendingMachineRepo repo)
         {
