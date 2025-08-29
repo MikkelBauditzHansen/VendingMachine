@@ -45,8 +45,22 @@ namespace VendingMachine
                 }
                 else if (input == "2")
                 {
+
                     Console.Write("Indtast produkt-ID: ");
-                    int id = Convert.ToInt32(Console.ReadLine());
+                    string idText = Console.ReadLine();
+
+                    int id;
+                    try
+                    {
+                        id = Convert.ToInt32(idText);
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Ugyldigt ID. Skriv et tal.");
+                        Console.WriteLine("Tryk en tast for at fortsætte...");
+                        Console.ReadKey();           
+                        continue;                    
+                    }
 
                     Product chosen = vmService.FindById(id); // find én fysisk vare
                     if (chosen == null)
@@ -59,9 +73,26 @@ namespace VendingMachine
                     }
                     else
                     {
-                        saldo = saldo - chosen.Price;
-                        repo.Delete(chosen); // fjern præcis én enhed
-                        Console.WriteLine("Du købte: " + chosen.Name);
+                        Console.WriteLine($"Er du sikker på dit valg? du har valgt {chosen.Name}(ja eller nej)");
+                        string confirm = Console.ReadLine();
+                        if(confirm == "ja")
+                        {
+                            saldo = saldo - chosen.Price;
+                            vmService.Delete(chosen); // fjern præcis én enhed
+                            Console.WriteLine("Du købte: " + chosen.Name);
+                        }
+                        else if (confirm == "nej")
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Ugyldigt Svar.");
+                            Console.WriteLine("Tryk en tast for at fortsætte...");
+                            Console.ReadKey();
+                            continue;
+                        }
+                        
                     }
                 }
                 else if (input == "3")

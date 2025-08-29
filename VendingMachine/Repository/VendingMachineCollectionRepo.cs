@@ -16,6 +16,10 @@ namespace VendingMachine.Repository
             { _shelf.Add(new Product(1, "Cola", 20, "0.33L")); }
             for (int i = 0; i < 3; i++)
             { _shelf.Add(new Product(2, "Sprite", 18, "0.33L")); }
+            for (int i = 0; i < 5; i++)
+            { _shelf.Add(new Product(3, "Mars", 15, "69g")); }
+            for (int i = 0; i < 5; i++)
+            { _shelf.Add(new Product(4, "Twix", 16, "69g")); }
         }
 
         public void Add(Product product)
