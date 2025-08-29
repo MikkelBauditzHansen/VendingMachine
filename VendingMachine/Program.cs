@@ -11,7 +11,7 @@ namespace VendingMachine
         static void Main(string[] args)
         {
             IPaymentRepo paymentRepo = new PaymentCollectionRepo();
-            IVendingMachineRepo repo = new VendingMachineCollectionRepo(); // fælles hylde
+            IVendingMachineRepo repo = new VendingMachineCollectionRepo(); // fællesnjj hylde
             PaymentService paymentService = new PaymentService(paymentRepo);
             VendingMachineService vmService = new VendingMachineService(repo, paymentService);
 
