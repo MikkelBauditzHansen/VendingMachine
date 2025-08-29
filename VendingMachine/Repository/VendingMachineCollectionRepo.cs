@@ -1,68 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using VendingMachine.Models;
 
 namespace VendingMachine.Repository
 {
-    class VendingMachineCollectionRepo : IVendingMachineRepo
+    public class VendingMachineCollectionRepo : IVendingMachineRepo
     {
-        private readonly List<Product> _cokes;
+        private readonly List<Product> _shelf;
 
         public VendingMachineCollectionRepo()
         {
-            _cokes = new List<Product>();
-            for (int i = 0;  i < 10; i++)
-            {
-                Product cola = new Product(1, "Cola", 0, "0.33L");
-                _cokes.Add(cola);
-            }
-            
+            _shelf = new List<Product>();
+
+            int i = 0;
+            while (i < 5) { _shelf.Add(new Product(1, "Cola", 20, "0.33L")); i = i + 1; }
+            i = 0;
+            while (i < 3) { _shelf.Add(new Product(2, "Sprite", 18, "0.33L")); i = i + 1; }
         }
-        
 
         public void Add(Product product)
         {
-            _cokes.Add(product);
+            _shelf.Add(product);
         }
+
         public List<Product> GetAll()
         {
-            return new List<Product>(_cokes);
+            return new List<Product>(_shelf);
         }
-        public void Delete(Product product)
-        {
-            for (int i = 0; i < _cokes.Count; i++)
-            {
-                if (_cokes[i].ID == product.ID)
-                {
-                    _cokes.RemoveAt(i);
-                    break;
-                }
-            }
-        }
+
         public Product FindById(int id)
         {
-            for (int i = 0; i < _cokes.Count; i++)
+            int i = 0;
+            while (i < _shelf.Count)
             {
-                if (_cokes[i].ID == id)
-                {
-                    return _cokes[i];
-                }
+                if (_shelf[i].ID == id) { return _shelf[i]; }
+                i = i + 1;
             }
             return null;
         }
-        public void Update(Product product)
+
+        public void Delete(Product product)
         {
-            for (int i = 0; i < _cokes.Count; i++)
-            {
-                if (_cokes[i].ID == product.ID)
-                {
-                    _cokes[i] = product;
-                    break;
-                }
-            }
+            _shelf.Remove(product);
         }
     }
 }
-

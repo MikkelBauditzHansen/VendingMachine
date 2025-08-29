@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using VendingMachine.Models;
 
 namespace VendingMachine.Repository
 {
     public interface IVendingMachineRepo
     {
-        void Add(Product product);
-        void Delete(Product product);
-        List<Product> GetAll();
-        Product FindById(int id);
-        void Update(Product product);
-
+        void Add(Product product);          // læg én fysisk vare på hylden
+        List<Product> GetAll();             // snapshot af hylden
+        Product FindById(int id);           // find første vare med ID
+        void Delete(Product product);       // fjern præcis den vare
     }
 }
