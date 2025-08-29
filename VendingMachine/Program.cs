@@ -74,13 +74,12 @@ namespace VendingMachine
                         saldo -= belob;
                         Console.WriteLine("Du hævede " + belob + " kr.");
                     }
-                    
+
                 }
                 else if (adminInput == "3")
                 {
-                    Console.Write("");
+                    AddProduct(repo);   // <-- sender repo ind
                 }
-            }
 
 
                 while (running)
@@ -166,25 +165,26 @@ namespace VendingMachine
                         Console.ReadKey();
                     }
                 }
-        }
-
-        static void PrintProducts(List<Product> products) //husk at fjern
-        {
-            Console.WriteLine("ID  Navn        Pris   Str.   Lager");
-            Console.WriteLine("-------------------------------------");
-            foreach (Product p in products)
-            {
-                Console.WriteLine(p.ID + "   " + p.Name.PadRight(10) + p.Price + "kr   " + p.Size.PadRight(5) + "   " + p.Quantity);
             }
-        }
 
-        static Product FindById(List<Product> products, int id) //husk at fjern
-        {
-            foreach (Product p in products)
+            static void PrintProducts(List<Product> products) //husk at fjern
             {
-                if (p.ID == id) return p;
+                Console.WriteLine("ID  Navn        Pris   Str.   Lager");
+                Console.WriteLine("-------------------------------------");
+                foreach (Product p in products)
+                {
+                    Console.WriteLine(p.ID + "   " + p.Name.PadRight(10) + p.Price + "kr   " + p.Size.PadRight(5) + "   " + p.Quantity);
+                }
             }
-            return null;
+
+            static Product FindById(List<Product> products, int id) //husk at fjern
+            {
+                foreach (Product p in products)
+                {
+                    if (p.ID == id) return p;
+                }
+                return null;
+            }
         }
         private static void AddProduct(IVendingMachineRepo repo)
         {
