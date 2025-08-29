@@ -48,7 +48,7 @@ namespace VendingMachine
                     Console.Write("Indtast produkt-ID: ");
                     int id = Convert.ToInt32(Console.ReadLine());
 
-                    Product chosen = repo.FindById(id); // find én fysisk vare
+                    Product chosen = vmService.FindById(id); // find én fysisk vare
                     if (chosen == null)
                     {
                         Console.WriteLine("Udsolgt eller ukendt ID!");
@@ -89,15 +89,13 @@ namespace VendingMachine
             }
         }
 
-        // ===== Hjælpemetoder (skal ligge UDEN for Main) =====
-
-        // Tæl antal pr. ID/Name ved at kigge på repoens liste
         private static void PrintStock(IVendingMachineRepo repo)
         {
             List<Product> items = repo.GetAll();
 
             List<int> ids = new List<int>();
             List<string> names = new List<string>();
+            List<int> price = new List<int>();
             List<int> counts = new List<int>();
 
             int i = 0;
@@ -109,6 +107,7 @@ namespace VendingMachine
                 {
                     ids.Add(p.ID);
                     names.Add(p.Name);
+                    price.Add(p.Price);
                     counts.Add(1);
                 }
                 else
@@ -118,13 +117,14 @@ namespace VendingMachine
                 i = i + 1;
             }
 
-            Console.WriteLine("ID   Navn              Antal");
-            Console.WriteLine("-----------------------------");
+            Console.WriteLine("ID   Navn   pris i kr.   Antal");
+            Console.WriteLine("----------------------------------");
             int j = 0;
             while (j < ids.Count)
             {
-                string line = ids[j].ToString().PadRight(4)
-                             + names[j].PadRight(17)
+                string line = ids[j].ToString().PadRight(5)
+                             + names[j].PadRight(10)
+                             + price[j].ToString().PadRight(12)
                              + counts[j].ToString();
                 Console.WriteLine(line);
                 j = j + 1;

@@ -27,7 +27,6 @@ namespace VendingMachine.Repository
         {
             return new List<Product>(_shelf);
         }
-
         public Product FindById(int id)
         {
             int i = 0;
@@ -38,6 +37,7 @@ namespace VendingMachine.Repository
             }
             return null;
         }
+
 
         public void Delete(Product product)
         {

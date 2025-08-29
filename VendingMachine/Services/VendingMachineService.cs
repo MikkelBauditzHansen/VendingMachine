@@ -9,7 +9,6 @@ namespace VendingMachine.Services
 {
     class VendingMachineService
     {
-        
         private  IVendingMachineRepo _productRepo;
         private  PaymentService _paymentService;
 
@@ -28,7 +27,10 @@ namespace VendingMachine.Services
         {
             _productRepo.Delete(product);
         }
-
+        public Product FindById(int id)
+        {
+          return _productRepo.FindById(id);
+        }
         public List<Product> GetAll()
         {
             return _productRepo.GetAll();
