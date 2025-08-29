@@ -15,72 +15,8 @@ namespace VendingMachine
             PaymentService paymentService = new PaymentService(paymentRepo);
             VendingMachineService vmService = new VendingMachineService(repo, paymentService);
 
-            Console.WriteLine("Skriv rolle: (Admin, Kunde)");
-            string menuInput = Console.ReadLine();
-
-            bool running = false;
-            bool adminRunning = false;
+            bool running = true;
             int saldo = 0;
-
-            if (menuInput != null && menuInput.ToLower() == "kunde") { running = true; }
-            if (menuInput != null && menuInput.ToLower() == "admin") { adminRunning = true; }
-            if (!running && !adminRunning) { Console.WriteLine("ugyldig svar"); return; }
-
-            // ===== ADMIN LOOP =====
-            while (adminRunning)
-            {
-                Console.Clear();
-                Console.WriteLine("=== SIMPEL VENDING MACHINE ===");
-                Console.WriteLine("Bank saldo: " + saldo + " kr.");
-                Console.WriteLine();
-                PrintStock(repo);
-                Console.WriteLine();
-                Console.WriteLine("1) Indsæt penge");
-                Console.WriteLine("2) Hæv penge");
-                Console.WriteLine("3) Tilføj produkt");
-                Console.WriteLine("4) Fjern produkt");
-                Console.WriteLine("0) Afslut");
-                Console.Write("Vælg: ");
-
-                string adminInput = Console.ReadLine();
-
-                if (adminInput == "1")
-                {
-                    Console.Write("Indtast beløb: ");
-                    int belob = Convert.ToInt32(Console.ReadLine());
-                    if (belob > 0) { saldo += belob; Console.WriteLine("Du indsatte " + belob + " kr."); }
-                    else { Console.WriteLine("Ugyldigt beløb."); }
-                }
-                else if (adminInput == "2")
-                {
-                    Console.Write("Indtast beløb: ");
-                    int belob = Convert.ToInt32(Console.ReadLine());
-                    if (belob > 0) { saldo -= belob; Console.WriteLine("Du hævede " + belob + " kr."); }
-                }
-                else if (adminInput == "3")
-                {
-                    AddProduct(repo);   // tilføj N enheder til hylden
-                }
-                else if (adminInput == "4")
-                {
-                    RemoveOneById(repo); // fjern én enhed
-                }
-                else if (adminInput == "0")
-                {
-                    adminRunning = false;
-                }
-                else
-                {
-                    Console.WriteLine("Ugyldigt valg.");
-                }
-
-                if (adminRunning)
-                {
-                    Console.WriteLine();
-                    Console.WriteLine("Tryk en tast for at fortsætte...");
-                    Console.ReadKey();
-                }
-            }
 
             // ===== KUNDE LOOP =====
             while (running)
@@ -211,53 +147,54 @@ namespace VendingMachine
             return -1;
         }
 
-        // ADMIN: Tilføj N fysiske enheder (individuelle objekter)
-        private static void AddProduct(IVendingMachineRepo repo)
-        {
-            Console.WriteLine("===Admin: Tilføj nyt produkt====");
+        //    // ADMIN: Tilføj N fysiske enheder (individuelle objekter)
+        //    private static void AddProduct(IVendingMachineRepo repo)
+        //    {
+        //        Console.WriteLine("===Admin: Tilføj nyt produkt====");
 
-            Console.Write("ID: ");
-            int id = Convert.ToInt32(Console.ReadLine());
+        //        Console.Write("ID: ");
+        //        int id = Convert.ToInt32(Console.ReadLine());
 
-            Console.Write("Navn: ");
-            string nameText = Console.ReadLine();
+        //        Console.Write("Navn: ");
+        //        string nameText = Console.ReadLine();
 
-            Console.Write("Pris: ");
-            int price = Convert.ToInt32(Console.ReadLine());
+        //        Console.Write("Pris: ");
+        //        int price = Convert.ToInt32(Console.ReadLine());
 
-            Console.Write("Størrelse: ");
-            string sizeText = Console.ReadLine();
+        //        Console.Write("Størrelse: ");
+        //        string sizeText = Console.ReadLine();
 
-            Console.Write("Antal (enheder): ");
-            int amount = Convert.ToInt32(Console.ReadLine());
+        //        Console.Write("Antal (enheder): ");
+        //        int amount = Convert.ToInt32(Console.ReadLine());
 
-            int n = 0;
-            while (n < amount)
-            {
-                Product p = new Product(id, nameText, price, sizeText);
-                repo.Add(p);
-                n = n + 1;
-            }
+        //        int n = 0;
+        //        while (n < amount)
+        //        {
+        //            Product p = new Product(id, nameText, price, sizeText);
+        //            repo.Add(p);
+        //            n = n + 1;
+        //        }
 
-            Console.WriteLine(amount + " stk " + nameText + " tilføjet.");
-        }
+        //        Console.WriteLine(amount + " stk " + nameText + " tilføjet.");
+        //    }
 
-        // ADMIN: Fjern én enhed med valgt ID
-        private static void RemoveOneById(IVendingMachineRepo repo)
-        {
-            Console.Write("Angiv ID der skal fjernes (én vare): ");
-            int id = Convert.ToInt32(Console.ReadLine());
+        //    // ADMIN: Fjern én enhed med valgt ID
+        //    private static void RemoveOneById(IVendingMachineRepo repo)
+        //    {
+        //        Console.Write("Angiv ID der skal fjernes (én vare): ");
+        //        int id = Convert.ToInt32(Console.ReadLine());
 
-            Product p = repo.FindById(id);
-            if (p == null)
-            {
-                Console.WriteLine("Ingen vare med det ID på lager.");
-            }
-            else
-            {
-                repo.Delete(p);
-                Console.WriteLine("Fjernede: " + p.Name);
-            }
-        }
+        //        Product p = repo.FindById(id);
+        //        if (p == null)
+        //        {
+        //            Console.WriteLine("Ingen vare med det ID på lager.");
+        //        }
+        //        else
+        //        {
+        //            repo.Delete(p);
+        //            Console.WriteLine("Fjernede: " + p.Name);
+        //        }
+        //    }
+        //}
     }
 }

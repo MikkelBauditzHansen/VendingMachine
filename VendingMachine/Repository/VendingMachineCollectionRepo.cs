@@ -11,10 +11,11 @@ namespace VendingMachine.Repository
         {
             _shelf = new List<Product>();
 
-            int i = 0;
-            while (i < 5) { _shelf.Add(new Product(1, "Cola", 20, "0.33L")); i = i + 1; }
-            i = 0;
-            while (i < 3) { _shelf.Add(new Product(2, "Sprite", 18, "0.33L")); i = i + 1; }
+            
+            for(int i = 0; i < 5; i++)
+            { _shelf.Add(new Product(1, "Cola", 20, "0.33L")); }
+            for (int i = 0; i < 3; i++)
+            { _shelf.Add(new Product(2, "Sprite", 18, "0.33L")); }
         }
 
         public void Add(Product product)
