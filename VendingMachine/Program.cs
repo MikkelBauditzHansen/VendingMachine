@@ -1,4 +1,5 @@
-﻿using VendingMachine.Repository;
+﻿using Microsoft.VisualBasic.FileIO;
+using VendingMachine.Repository;
 using VendingMachine.Services;
 
 namespace VendingMachine
@@ -13,6 +14,7 @@ namespace VendingMachine
             VendingMachineService vmService = new VendingMachineService(productRepo, paymentService);
             IVendingMachineRepo repo = new VendingMachineCollectionRepo();
             List<Product> products = repo.GetAll();
+            
 
             Console.WriteLine("Skriv rolle: (Admin, Kunde)");
             string menuInput = Console.ReadLine();
@@ -120,29 +122,19 @@ namespace VendingMachine
                         Console.Write("Indtast produkt-ID: ");
                         string idTxt = Console.ReadLine();
                         int id;
-                        if (int.TryParse(idTxt, out id))
-                        {
-                            Product chosen = FindById(products, id);
-                            if (chosen == null)
-                            {
-                                Console.WriteLine("Ukendt produkt.");
-                            }
-                            else if (chosen.Quantity <= 0)
-                            {
-                                Console.WriteLine("Udsolgt!");
-                            }
-                            else if (saldo < chosen.Price)
-                            {
-                                Console.WriteLine("For lav saldo.");
-                            }
-                            else
-                            {
-                                saldo -= chosen.Price;
-                                chosen.Quantity -= 1;
-                                Console.WriteLine("Du købte: " + chosen.Name);
-                            }
-                        }
+                    if (int.TryParse(idTxt, out id))
+                    {
+                        Product chosen = FindById(products, id);
                     }
+
+                    else
+                    {
+
+                        repo.Delete(chosen);
+                        Console.WriteLine("Du fik: " + chosen.Name);
+                    }
+                        }
+                    
                     else if (input == "3")
                     {
                         Console.WriteLine("Du fik " + saldo + " kr. retur.");
@@ -174,7 +166,7 @@ namespace VendingMachine
             Console.WriteLine("-------------------------------------");
             foreach (Product p in products)
             {
-                Console.WriteLine(p.ID + "   " + p.Name.PadRight(10) + p.Price + "kr   " + p.Size.PadRight(5) + "   " + p.Quantity);
+                Console.WriteLine(p.ID + "   " + p.Name.PadRight(10) + p.Price + "kr   " + p.Size.PadRight(5) + "   ");
             }
         }
 
@@ -207,11 +199,11 @@ namespace VendingMachine
             string quantityText = Console.ReadLine();
             int quantity = Convert.ToInt32(idText);
 
-            Product newProduct = new Product(id, nameText, price, sizeText, quantity);
+            Product newProduct = new Product(id, nameText, price, sizeText);
 
             repo.Add(newProduct);
 
-            Console.WriteLine($"Produkt tilføjet: ID: {id}, {nameText}, {price}, {sizeText}, {quantity}");
+            Console.WriteLine($"Produkt tilføjet: ID: {id}, {nameText}, {price}, {sizeText}");
         }
     }
 
