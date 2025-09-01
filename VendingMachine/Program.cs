@@ -3,7 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using VendingMachine.Repository;  // IVendingMachineRepo, VendingMachineCollectionRepo
 using VendingMachine.Services;   // PaymentService, IPaymentRepo, PaymentCollectionRepo
-using VendingMachine.Models;     // Product
+using VendingMachine.Models;     
 
 namespace VendingMachine
 {
