@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using VendingMachine.Models;
+using System.IO;
 
 namespace VendingMachine.Repository
 {

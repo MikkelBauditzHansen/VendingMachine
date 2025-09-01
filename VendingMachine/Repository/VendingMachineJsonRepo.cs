@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using VendingMachine.Models;     
 
 namespace VendingMachine.Repository
 {
-    class VendingMachineJsonRepo : VendingMachineCollectionRepo
+    public class VendingMachineJsonRepo : VendingMachineCollectionRepo
     {
         private readonly string _filePath = "products.json";
 

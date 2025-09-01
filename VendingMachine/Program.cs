@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using VendingMachine.Repository;  // IVendingMachineRepo, VendingMachineCollectionRepo
 using VendingMachine.Services;   // PaymentService, IPaymentRepo, PaymentCollectionRepo
@@ -11,7 +12,7 @@ namespace VendingMachine
         static void Main(string[] args)
         {
             IPaymentRepo paymentRepo = new PaymentCollectionRepo();
-            IVendingMachineRepo repo = new VendingMachineCollectionRepo(); // fællesnjj hylde
+            IVendingMachineRepo repo = new VendingMachineJsonRepo();
             PaymentService paymentService = new PaymentService(paymentRepo);
             VendingMachineService vmService = new VendingMachineService(repo, paymentService);
 
@@ -174,7 +175,7 @@ namespace VendingMachine
                     return;
                 }
 
-
+            }
 
                 // ===== KUNDE LOOP =====
 
@@ -277,7 +278,7 @@ namespace VendingMachine
                         Console.ReadKey();
                     }
                 }
-            } }
+            } 
 
         private static void PrintStock(IVendingMachineRepo repo)
         {
