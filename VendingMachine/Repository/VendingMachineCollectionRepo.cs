@@ -5,7 +5,7 @@ namespace VendingMachine.Repository
 {
     public class VendingMachineCollectionRepo : IVendingMachineRepo
     {
-        private readonly List<Product> _shelf;
+        protected List<Product> _shelf;
 
         public VendingMachineCollectionRepo()
         {
@@ -13,16 +13,17 @@ namespace VendingMachine.Repository
 
             
             for(int i = 0; i < 5; i++)
-            { _shelf.Add(new Product(1, "Cola", 20, "0.33L")); }
+            { _shelf.Add(new Product(1, "Cola", 20)); }
             for (int i = 0; i < 3; i++)
-            { _shelf.Add(new Product(2, "Sprite", 18, "0.33L")); }
+            { _shelf.Add(new Product(2, "Sprite", 18)); }
             for (int i = 0; i < 5; i++)
-            { _shelf.Add(new Product(3, "Mars", 15, "69g")); }
+            { _shelf.Add(new Product(3, "Mars", 15)); }
             for (int i = 0; i < 5; i++)
-            { _shelf.Add(new Product(4, "Twix", 16, "69g")); }
+            { _shelf.Add(new Product(4, "Twix", 16)); }
         }
 
-        public void Add(Product product)
+        // gør virtual så JSON-repo kan override
+        public virtual void Add(Product product)
         {
             _shelf.Add(product);
         }
@@ -31,6 +32,7 @@ namespace VendingMachine.Repository
         {
             return new List<Product>(_shelf);
         }
+
         public Product FindById(int id)
         {
             int i = 0;
@@ -42,8 +44,8 @@ namespace VendingMachine.Repository
             return null;
         }
 
-
-        public void Delete(Product product)
+        // gør virtual så JSON-repo kan override
+        public virtual void Delete(Product product)
         {
             _shelf.Remove(product);
         }
