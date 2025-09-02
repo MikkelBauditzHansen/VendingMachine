@@ -28,7 +28,11 @@ namespace VendingMachine.Repository
         {
             _shelf.Add(product);
         }
-
+        // gør virtual så JSON-repo kan override
+        public virtual void Delete(Product product)
+        {
+            _shelf.Remove(product);
+        }
         public List<Product> GetAll()
         {
             return new List<Product>(_shelf);
@@ -43,12 +47,6 @@ namespace VendingMachine.Repository
                 i = i + 1;
             }
             return null;
-        }
-
-        // gør virtual så JSON-repo kan override
-        public virtual void Delete(Product product)
-        {
-            _shelf.Remove(product);
         }
     }
 }
