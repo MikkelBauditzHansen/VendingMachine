@@ -16,206 +16,222 @@ namespace VendingMachine
             PaymentService paymentService = new PaymentService(paymentRepo);
             VendingMachineService vmService = new VendingMachineService(repo, paymentService);
 
-
+            bool menu = true;
             bool adminRunning = false;
-            bool running = false;
+            bool costumerRunning = false;
             int saldo = 0;
             int bankSaldo = 1000;
             // ===== ADMIN LOOP =====
-
-            Console.WriteLine("Velkommen til Vending Machine, skriv kunde eller admin");
-            string inputChoice = Console.ReadLine();
-
-
-            if (inputChoice.ToLower() == "admin")
+            while (menu)
             {
-                Console.Write("Indtast admin-kode: ");
-                string code = Console.ReadLine();
-                if (code == "1235")
+                Console.WriteLine("Velkommen til Vending Machine, skriv kunde eller admin");
+                string inputChoice = Console.ReadLine();
+
+                if (inputChoice.ToLower() == "admin")
                 {
-                    adminRunning = true;
+                    Console.Write("Indtast admin-kode: ");
+                    string code = Console.ReadLine();
+                    if (code == "1235")
+                    {
+                        adminRunning = true;
+                        menu = false;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Forkert kode - fuck af");
+                        return;
+                    }
+                }
+                if (inputChoice.ToLower() == "kunde")
+                {
+                    costumerRunning = true;
+                    menu = false;
                 }
                 else
                 {
-                    Console.WriteLine("Forkert kode - fuck af");
-                    return;
+                    Console.WriteLine("Forkert input");
+                    Pause();
+                    continue;
                 }
+                
             }
-            if(inputChoice.ToLower() == "kunde")
-            {
-                running = true;
-            }
+            
+
 
             while (adminRunning)
-            {
-                Console.Clear();
-                Console.WriteLine("=== Admin System ===");
-                Console.WriteLine("Saldo: " + bankSaldo + " kr.");
-                Console.WriteLine();
-                PrintStock(repo);
-                Console.WriteLine();
-                Console.WriteLine("1) Hæv penge");
-                Console.WriteLine("2) Tilføj penge");
-                Console.WriteLine("3) Tilføj varer");
-                Console.WriteLine("4) Fjern varer");
-                Console.WriteLine("5) Fjern alle varer med et ID");
-                Console.WriteLine("6) Tøm hele hylden");
-                Console.WriteLine("0) Afslut");
-                Console.Write("Vælg: ");
-
-                string adminChoice = Console.ReadLine();
-
-                if (adminChoice == "1")
                 {
-                    Console.Write("Indtast beløb: ");
-                    string belobTxt = Console.ReadLine();
-                    int belob;
-                    try
-                    {
-                        belob = Convert.ToInt32(belobTxt);
-                    }
-                    catch
-                    {
-                        Console.WriteLine("Ugyldigt beløb.");
-                        Pause();
-                        continue;
-                    }
+                    Console.Clear();
+                    Console.WriteLine("=== Admin System ===");
+                    Console.WriteLine("Saldo: " + bankSaldo + " kr.");
+                    Console.WriteLine();
+                    PrintStock(repo);
+                    Console.WriteLine();
+                    Console.WriteLine("1) Hæv penge");
+                    Console.WriteLine("2) Tilføj penge");
+                    Console.WriteLine("3) Tilføj varer");
+                    Console.WriteLine("4) Fjern varer");
+                    Console.WriteLine("5) Fjern alle varer med et ID");
+                    Console.WriteLine("6) Tøm hele hylden");
+                    Console.WriteLine("0) Afslut");
+                    Console.Write("Vælg: ");
 
-                    if (belob <= 0)
-                    {
-                        Console.WriteLine("Beløbet skal være positivt.");
-                    }
-                    else if (belob > bankSaldo)
-                    {
-                        Console.WriteLine("Kan ikke hæve mere end bank saldo.");
-                    }
-                    else
-                    {
-                        bankSaldo = bankSaldo - belob;
-                        Console.WriteLine("Du hævede " + belob + " kr. Ny bank saldo: " + bankSaldo + " kr.");
-                    }
-                    Pause();
-                }
-                if (adminChoice == "2")
-                {
-                    int belob = PromptInt("Indtast beløb:");
-                    if (belob <= 0) Console.WriteLine("Beløbet skal være positivt.");
-                    else { bankSaldo = bankSaldo + belob; Console.WriteLine("Du indsatte " + belob + " kr. Ny bank saldo: " + bankSaldo + " kr."); }
-                    Pause();
-                }
-                else if (adminChoice == "3")
-                {
-                    int id = PromptInt("ID:");
-                    Console.Write("Navn: ");
-                    string nameText = Console.ReadLine();
-                    int price = PromptInt("Pris:");
-                    int amount = PromptInt("Antal (enheder):");
+                    string adminChoice = Console.ReadLine();
 
-                    if (amount <= 0)
+                    if (adminChoice == "1")
                     {
-                        Console.WriteLine("Antal skal være positivt.");
-                        Pause();
-                        continue;
-                    }
-
-                    int n = 0;
-                    while (n < amount)
-                    {
-                        Product p = new Product(id, nameText, price);
-                        vmService.Add(p);
-                        n = n + 1;
-                    }
-
-                    Console.WriteLine(amount + " stk " + nameText + " tilføjet.");
-                    Pause();
-                }
-                else if (adminChoice == "4")
-                {
-                    int id = PromptInt("Indtast produkt-ID:");
-                    Product chosen = repo.FindById(id);
-                    if (chosen == null)
-                    {
-                        Console.WriteLine("Udsolgt eller ukendt ID!");
-                        Pause();
-                        continue;
-                    }
-
-                    Console.WriteLine("Er du sikker? Du har valgt " + chosen.Name + " (ja/nej)");
-                    string confirm = Console.ReadLine();
-                    if (confirm == "ja")
-                    {
-                        repo.Delete(chosen);
-                        Console.WriteLine("Fjernet: " + chosen.Name);
-                    }
-                    else if (confirm == "nej")
-                    {
-                        Console.WriteLine("Annulleret.");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Ugyldigt svar.");
-                    }
-                    Pause();
-                }
-                else if (adminChoice == "5")
-                {
-                    int id = PromptInt("Indtast produkt-ID som skal fjernes (alle med dette ID):");
-
-                    // Tag et snapshot og slet alle matches
-                    List<Product> items = repo.GetAll();
-                    int i = 0;
-                    int removed = 0;
-
-                    while (i < items.Count)
-                    {
-                        Product p = items[i];
-                        if (p.ID == id)
+                        Console.Write("Indtast beløb: ");
+                        string belobTxt = Console.ReadLine();
+                        int belob;
+                        try
                         {
-                            repo.Delete(p);
-                            removed = removed + 1;
+                            belob = Convert.ToInt32(belobTxt);
                         }
-                        i = i + 1;
+                        catch
+                        {
+                            Console.WriteLine("Ugyldigt beløb.");
+                            Pause();
+                            continue;
+                        }
+
+                        if (belob <= 0)
+                        {
+                            Console.WriteLine("Beløbet skal være positivt.");
+                        }
+                        else if (belob > bankSaldo)
+                        {
+                            Console.WriteLine("Kan ikke hæve mere end bank saldo.");
+                        }
+                        else
+                        {
+                            bankSaldo = bankSaldo - belob;
+                            Console.WriteLine("Du hævede " + belob + " kr. Ny bank saldo: " + bankSaldo + " kr.");
+                        }
+                        Pause();
+                    }
+                    if (adminChoice == "2")
+                    {
+                        int belob = PromptInt("Indtast beløb:");
+                        if (belob <= 0) Console.WriteLine("Beløbet skal være positivt.");
+                        else { bankSaldo = bankSaldo + belob; Console.WriteLine("Du indsatte " + belob + " kr. Ny bank saldo: " + bankSaldo + " kr."); }
+                        Pause();
+                    }
+                    else if (adminChoice == "3")
+                    {
+                        int id = PromptInt("ID:");
+                        Console.Write("Navn: ");
+                        string nameText = Console.ReadLine();
+                        int price = PromptInt("Pris:");
+                        int amount = PromptInt("Antal (enheder):");
+                        Console.WriteLine("Vent venligst...");
+
+                        if (amount <= 0)
+                        {
+                            Console.WriteLine("Antal skal være positivt.");
+                            Pause();
+                            continue;
+                        }
+
+                        int n = 0;
+                        while (n < amount)
+                        {
+                            Product p = new Product(id, nameText, price);
+                            vmService.Add(p);
+                            n = n + 1;
+                        }
+
+                        Console.WriteLine(amount + " stk " + nameText + " tilføjet.");
+                        Pause();
+                    }
+                    else if (adminChoice == "4")
+                    {
+                        int id = PromptInt("Indtast produkt-ID:");
+                        Product chosen = repo.FindById(id);
+                        if (chosen == null)
+                        {
+                            Console.WriteLine("Udsolgt eller ukendt ID!");
+                            Pause();
+                            continue;
+                        }
+
+                        Console.WriteLine("Er du sikker? Du har valgt " + chosen.Name + " (ja/nej)");
+                        string confirm = Console.ReadLine();
+                        if (confirm == "ja")
+                        {
+                            repo.Delete(chosen);
+                            Console.WriteLine("Fjernet: " + chosen.Name);
+                        }
+                        else if (confirm == "nej")
+                        {
+                            Console.WriteLine("Annulleret.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Ugyldigt svar.");
+                        }
+                        Pause();
+                    }
+                    else if (adminChoice == "5")
+                    {
+
+                        int id = PromptInt("Indtast produkt-ID som skal fjernes (alle med dette ID):");
+
+                        // Tag et snapshot og slet alle matches
+                        List<Product> items = repo.GetAll();
+                        int i = 0;
+                        int removed = 0;
+                        Console.WriteLine("Vent venligst...");
+
+                        while (i < items.Count)
+                        {
+                            Product p = items[i];
+                            if (p.ID == id)
+                            {
+                                repo.Delete(p);
+                                removed = removed + 1;
+                            }
+                            i = i + 1;
+                        }
+
+                        if (removed == 0)
+                        {
+                            Console.WriteLine("Ingen varer fundet med ID " + id + ".");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Fjernede " + removed + " vare(r) med ID " + id + ".");
+                        }
+                        Pause();
+                    }
+                    else if (adminChoice == "6")
+                    {
+                        // Tøm hele hylden
+                        List<Product> items = repo.GetAll(); // snapshot
+                        int i = 0;
+                        int removed = 0;
+                        Console.WriteLine("Vent venligst...");
+
+                        while (i < items.Count)
+                        {
+                            repo.Delete(items[i]);
+                            removed = removed + 1;
+                            i = i + 1;
+                        }
+                        Console.WriteLine("Hylden er tømt (" + removed + " vare(r)).");
+                        Pause();
+                    }
+                    else if (adminChoice == "0")
+                    {
+                        Console.WriteLine("Tak for besøget!");
+                        if (saldo > 0) { Console.WriteLine("Returpenge: " + saldo + " kr."); }
+                        adminRunning = false;
+                        return;
                     }
 
-                    if (removed == 0)
-                    {
-                        Console.WriteLine("Ingen varer fundet med ID " + id + ".");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Fjernede " + removed + " vare(r) med ID " + id + ".");
-                    }
-                    Pause();
                 }
-                else if (adminChoice == "6")
-                {
-                    // Tøm hele hylden
-                    List<Product> items = repo.GetAll(); // snapshot
-                    int i = 0;
-                    int removed = 0;
-
-                    while (i < items.Count)
-                    {
-                        repo.Delete(items[i]);
-                        removed = removed + 1;
-                        i = i + 1;
-                    }
-                    Console.WriteLine("Hylden er tømt (" + removed + " vare(r)).");
-                    Pause();
-                }
-                else if (adminChoice == "0")
-                {
-                    Console.WriteLine("Tak for besøget!");
-                    if (saldo > 0) { Console.WriteLine("Returpenge: " + saldo + " kr."); }
-                    adminRunning = false;
-                    return;
-                }
-
-            }
 
             // ===== KUNDE LOOP =====
 
-            while (running)
+            while (costumerRunning)
             {
                 Console.Clear();
                 Console.WriteLine("=== SIMPEL VENDING MACHINE ===");
@@ -325,7 +341,7 @@ namespace VendingMachine
                 {
                     Console.WriteLine("Tak for besøget!");
                     if (saldo > 0) { Console.WriteLine("Returpenge: " + saldo + " kr."); }
-                    running = false;
+                    costumerRunning = false;
                 }
                 else
                 {
