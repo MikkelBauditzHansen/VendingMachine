@@ -122,7 +122,7 @@ namespace VendingMachine
                     while (n < amount)
                     {
                         Product p = new Product(id, nameText, price);
-                        repo.Add(p);
+                        vmService.Add(p);
                         n = n + 1;
                     }
 
