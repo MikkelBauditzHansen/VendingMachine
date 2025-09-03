@@ -263,6 +263,7 @@ namespace VendingMachine
                         Console.WriteLine("Ugyldigt ID. Skriv et tal.");
                         Console.WriteLine("Tryk en tast for at fortsætte...");
                         Console.ReadKey();
+                        Pause();
                         continue;
                     }
 
@@ -270,10 +271,15 @@ namespace VendingMachine
                     if (chosen == null)
                     {
                         Console.WriteLine("Udsolgt eller ukendt ID!");
+                        Pause();
+                        continue;
+                        
                     }
                     else if (saldo < chosen.Price)
                     {
                         Console.WriteLine("For lav saldo.");
+                        Pause();
+                        continue;
                     }
                     else
                     {
@@ -284,6 +290,8 @@ namespace VendingMachine
                             saldo = saldo - chosen.Price;
                             vmService.Delete(chosen); // fjern præcis én enhed
                             Console.WriteLine("Du købte: " + chosen.Name);
+                            Pause();
+                            
                         }
                         else if (confirm == "nej")
                         {
