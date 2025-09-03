@@ -22,6 +22,7 @@ namespace VendingMachine
             int saldo = 0;
             int bankSaldo = 1000;
             // ===== ADMIN LOOP =====
+
             while (menu)
             {
                 Console.WriteLine("Velkommen til Vending Machine, skriv kunde eller admin");
@@ -38,11 +39,12 @@ namespace VendingMachine
                     }
                     else
                     {
-                        Console.WriteLine("Forkert kode - fuck af");
-                        return;
+                        Console.WriteLine("Forkert input fuck af");
+                        Pause();
+                        continue;
                     }
                 }
-                if (inputChoice.ToLower() == "kunde")
+                else if (inputChoice.ToLower() == "kunde")
                 {
                     costumerRunning = true;
                     menu = false;
@@ -53,7 +55,6 @@ namespace VendingMachine
                     Pause();
                     continue;
                 }
-                
             }
             
 
@@ -123,14 +124,6 @@ namespace VendingMachine
                         int price = PromptInt("Pris:");
                         int amount = PromptInt("Antal (enheder):");
                         Console.WriteLine("Vent venligst...");
-
-                        if (amount <= 0)
-                        {
-                            Console.WriteLine("Antal skal være positivt.");
-                            Pause();
-                            continue;
-                        }
-
                         int n = 0;
                         while (n < amount)
                         {
@@ -374,9 +367,11 @@ namespace VendingMachine
                 }
                 else // Hvis ja: øger blot tælleren for antal varer.
                 {
+
                     counts[index] = counts[index] + 1;
                 }
                 i = i + 1;
+
             }
 
             Console.WriteLine("ID   Navn   pris i kr.   Antal");
